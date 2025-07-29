@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elion Chat - Style Gemini</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS pour un thème sombre cohérent avec Gemini (Thème Noir par défaut) */
+        :root {
+            --gemini-bg-primary: #1F1F1F; /* Fond principal très sombre */
+            --gemini-bg-secondary: #2C2C2E; /* Fond des panneaux/cartes */
+            --gemini-bg-tertiary: #3A3A3C; /* Fond des éléments interactifs (input, boutons) */
+            --gemini-text-primary: #EAEAEA; /* Texte clair principal */
+            --gemini-text-secondary: #A0A0A0; /* Texte secondaire, icônes */
+            --gemini-accent-blue: #8AB4F8; /* Bleu clair pour accents (liens, icônes) */
+            --gemini-accent-blue-darker: #669DF6; /* Bleu plus foncé au survol */
+            --gemini-border-color: rgba(255, 255, 255, 0.1); /* Bordures subtiles */
+            --gemini-shadow: rgba(0, 0, 0, 0.3); /* Ombres légères */
+            --gemini-message-bg-elion: #2C2C2E; /* Fond des messages d'Elion */
+            --gemini-message-bg-user: #424244; /* Fond des messages de l'utilisateur (un peu plus foncé) */
+            --gemini-sidebar-item-hover: #3A3A3C; /* Hover pour les éléments de la sidebar */
+            --gemini-new-chat-bg: #8AB4F8; /* Couleur du bouton Nouveau Chat */
+            --gemini-new-chat-text: #1F1F1F; /* Texte du bouton Nouveau Chat */
+
+            /* Variables pour les thèmes */
+            --theme-color-main: var(--gemini-bg-primary);
+            --theme-color-secondary: var(--gemini-bg-secondary);
+            --theme-color-tertiary: var(--gemini-bg-tertiary);
+            --theme-text-main: var(--gemini-text-primary);
+            --theme-text-secondary: var(--gemini-text-secondary);
+            --theme-accent: var(--gemini-accent-blue);
+            --theme-accent-darker: var(--gemini-accent-blue-darker);
+            --theme-border: var(--gemini-border-color);
+            --theme-shadow: var(--gemini-shadow);
+        }
+
+        /* --- Thème Vert foncé --- */
+        body.theme-green {
+            --theme-color-main: #1A302F; /* Vert très foncé, presque noir */
+            --theme-color-secondary: #2C4745; /* Vert plus clair pour panneaux */
+            --theme-color-tertiary: #3D5A58; /* Vert moyen pour inputs */
+            --theme-text-main: #E0FFFE;
+            --theme-text-secondary: #B0C4DE;
+            --theme-accent: #66BB6A; /* Vert clair accent */
+            --theme-accent-darker: #4CAF50; /* Vert foncé accent */
+            --theme-border: rgba(102, 187, 106, 0.2);
+            --theme-shadow: rgba(0, 0, 0, 0.4);
+            --gemini-new-chat-bg: var(--theme-accent); /* Adapter les boutons */
+            --gemini-new-chat-text: var(--theme-color-main);
+        }
+
+        /* --- Thème Blanc --- */
+        body.theme-white {
+            --theme-color-main: #FFFFFF; /* Fond blanc */
+            --theme-color-secondary: #F0F0F0; /* Gris très clair pour panneaux */
+            --theme-color-tertiary: #E8E8E8; /* Gris clair pour inputs */
+            --theme-text-main: #333333;
+            --theme-text-secondary: #666666;
+            --theme-accent: #1976D2; /* Bleu foncé accent */
+            --theme-accent-darker: #1565C0; /* Bleu plus foncé accent */
+            --theme-border: rgba(0, 0, 0, 0.1);
+            --theme-shadow: rgba(0, 0, 0, 0.1);
+            --gemini-new-chat-bg: var(--theme-accent); /* Adapter les boutons */
+            --gemini-new-chat-text: white;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Roboto', sans-serif; /* Police proche de Gemini */
+            margin: 0;
+            padding: 0;
+            background-color: var(--theme-color-main);
+            color: var(--theme-text-main);
+            display: flex; /* Utilisation de flexbox pour la mise en page principale */
+            height: 100vh; /* Hauteur totale de la vue */
+            overflow: hidden; /* Empêche le défilement global de la page */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Transition douce pour le changement de thème */
+        }
+
+        /* --- Styles généraux utilisant les variables de thème --- */
+        .sidebar {
+            background-color: var(--theme-color-secondary);
+            border-right: 1px solid var(--theme-border);
+            box-shadow: 2px 0 10px var(--theme-shadow);
+            width: 280px; /* Largeur par défaut */
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+            transition: width 0.3s ease, padding 0.3s ease, transform 0.3s ease; /* Added transform for potential smooth slide-out on mobile */
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--theme-color-main);
+            position: relative;
+            transition: margin-left 0.3s ease; /* Smooth transition for main content shift */
+        }
+
+        /* Collapsed Sidebar State */
+        body.sidebar-collapsed .sidebar {
+            width: 70px; /* Reduced width */
+            padding: 20px 5px; /* Reduced horizontal padding */
+            overflow: hidden; /* Hide overflowing text */
+        }
+
+        body.sidebar-collapsed .sidebar .new-chat-button span,
+        body.sidebar-collapsed .sidebar .sidebar-nav li span,
+        body.sidebar-collapsed .sidebar .username-display,
+        body.sidebar-collapsed .sidebar .footer-links span,
+        body.sidebar-collapsed .sidebar h2 {
+            opacity: 0; /* Fade out text */
+            visibility: hidden; /* Hide completely after fade */
+            width: 0; /* Collapse width */
+            overflow: hidden; /* Prevent text wrapping */
+            transition: opacity 0.3s ease, visibility 0.3s ease, width 0.3s ease;
+        }
+        /* Ensure icons remain visible and centered in collapsed state */
+        body.sidebar-collapsed .sidebar .new-chat-button .icon,
+        body.sidebar-collapsed .sidebar .sidebar-nav a .icon,
+        body.sidebar-collapsed .sidebar .user-avatar-container,
+        body.sidebar-collapsed .sidebar .google-search-icon,
+        body.sidebar-collapsed .sidebar .footer-links a .icon,
+        body.sidebar-collapsed .sidebar .toggle-sidebar-button {
+            margin: 0 auto; /* Center icons */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        body.sidebar-collapsed .sidebar .new-chat-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 0;
+            /* Ensure the icon within the button remains */
+            display: flex; /* keep flex for centering icon */
+            justify-content: center;
+            align-items: center;
+        }
+        body.sidebar-collapsed .sidebar-header {
+            justify-content: center; /* Center the hamburger icon when collapsed */
+            margin-bottom: 20px; /* Keep spacing */
+            height: auto; /* Allow content to dictate height */
+        }
+        body.sidebar-collapsed .sidebar-header h2,
+        body.sidebar-collapsed .sidebar-header .new-chat-button {
+            display: none; /* Hide the title and New Chat button when collapsed */
+        }
+
+        /* Adjust main content when sidebar is collapsed */
+        body.sidebar-collapsed .main-content {
+            margin-left: 0; /* Already starts at 0, no change needed here if sidebar uses fixed width */
+        }
+        
+        /* New Chat specific adjustments for collapsed state */
+        body:not(.sidebar-collapsed) .sidebar-header .new-chat-button {
+            display: flex; /* Show when expanded */
+        }
+        body.sidebar-collapsed .sidebar-header .new-chat-button {
+            display: none; /* Hide when collapsed */
+        }
+
+        /* --- Chat area specific styles --- */
+        .chat-header {
+            background-color: var(--theme-color-main);
+            padding: 15px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--theme-border);
+            color: var(--theme-text-main);
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 500;
+        }
+
+        .message-area {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 900px; /* Limiter la largeur des messages */
+            width: 100%;
+            margin: 0 auto; /* Centrer la zone de message */
+            box-sizing: border-box; /* Inclure le padding dans la largeur */
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-top: 50px; /* Espace depuis le haut */
+            color: var(--theme-text-secondary);
+            font-size: 1.1em;
+            padding: 0 20px;
+        }
+
+        .welcome-message h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: var(--theme-text-main);
+        }
+
+        .welcome-message p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        /* Styles pour les messages de chat */
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .message-avatar-container {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 1.1em;
+            flex-shrink: 0; /* Empêche l'avatar de rétrécir */
+        }
+
+        .user .message-avatar-container.user-avatar-placeholder {
+            background-color: var(--theme-accent); /* Couleur pour l'utilisateur */
+            color: var(--gemini-new-chat-text);
+        }
+
+        .elion .message-avatar-container.elion-avatar-placeholder {
+            background-color: #555; /* Couleur pour Elion */
+            color: #FFF;
+        }
+
+        .message-content {
+            background-color: var(--gemini-message-bg-elion); /* Fond par défaut pour Elion */
+            padding: 12px 18px;
+            border-radius: 18px;
+            color: var(--theme-text-primary);
+            word-wrap: break-word; /* Gère les longs mots */
+            max-width: calc(100% - 70px); /* Laisse de la place pour l'avatar et le padding */
+        }
+        
+        .user .message-content {
+            background-color: var(--gemini-message-bg-user); /* Fond spécifique pour l'utilisateur */
+        }
+
+        /* Zone de saisie */
+        .input-area {
+            background-color: var(--theme-color-main);
+            padding: 20px;
+            border-top: 1px solid var(--theme-border);
+            display: flex;
+            justify-content: center;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: flex-end; /* Aligne le bouton avec le bas de la textarea */
+            width: 100%;
+            max-width: 800px; /* Largeur maximale pour le champ de saisie */
+            background-color: var(--theme-color-tertiary);
+            border-radius: 25px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 10px var(--theme-shadow);
+        }
+
+        .input-container textarea {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            color: var(--theme-text-main);
+            font-size: 1em;
+            padding: 5px 0;
+            resize: none; /* Désactive le redimensionnement manuel par l'utilisateur */
+            max-height: 200px; /* Limite la hauteur maximale de la textarea */
+            overflow-y: auto; /* Permet le défilement si le texte dépasse max-height */
+            line-height: 1.5;
+        }
+
+        .input-container textarea:focus {
+            outline: none;
+        }
+
+        .input-container textarea::placeholder {
+            color: var(--theme-text-secondary);
+        }
+
+        .send-button {
+            background-color: var(--theme-accent);
+            color: var(--gemini-new-chat-text);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .send-button:hover {
+            background-color: var(--theme-accent-darker);
+            transform: translateY(-1px);
+        }
+
+        /* --- Hamburger et En-tête de la barre latérale --- */
+        .sidebar-header {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sidebar-header h2 {
+            font-size: 1.8em;
+            margin: 0;
+            font-weight: 500;
+            white-space: nowrap; /* Empêche le texte de se casser */
+        }
+        .toggle-sidebar-button {
+            background: none;
+            border: none;
+            color: var(--theme-text-secondary);
+            font-size: 1.8em; /* Taille pour l'icône hamburger */
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: color 0.2s ease, background-color 0.2s ease;
+            line-height: 1; /* Pour mieux centrer le texte */
+        }
+        .toggle-sidebar-button:hover {
+            color: var(--theme-accent);
+            background-color: var(--theme-color-tertiary);
+        }
+
+        /* New Chat Button */
+        .new-chat-button {
+            background-color: var(--gemini-new-chat-bg);
+            color: var(--gemini-new-chat-text);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 15px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .new-chat-button:hover {
+            background-color: var(--gemini-accent-blue-darker);
+            transform: translateY(-1px);
+        }
+        .new-chat-button .icon {
+            font-size: 1.5em;
+            line-height: 1;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            flex-grow: 1; /* Permet à la nav de prendre de l'espace */
+            overflow-y: auto; /* Permet le défilement si trop d'éléments */
+        }
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            color: var(--theme-text-main);
+            text-decoration: none;
+            font-weight: 400;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap; /* Empêche le texte de se casser */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Ajoute des points de suspension si trop long */
+        }
+        .sidebar-nav a:hover {
+            background-color: var(--gemini-sidebar-item-hover);
+        }
+        .sidebar-nav a.active {
+            background-color: var(--theme-color-tertiary);
+            font-weight: 500;
+        }
+        .sidebar-nav .icon {
+            font-size: 1.2em;
+            color: var(--theme-text-secondary);
+        }
+        .sidebar-nav a.active .icon {
+            color: var(--theme-accent);
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding-top: 20px;
+            border-top: 1px solid var(--theme-border);
+            margin-top: auto; /* Pousse le footer vers le bas */
+        }
+
+        /* --- Barre de l'utilisateur (Gemini-like) --- */
+        .user-profile-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+            margin-bottom: 10px;
+            background-color: var(--theme-color-tertiary); /* Fond distinct pour cette section */
+        }
+        .user-profile-actions:hover {
+            background-color: var(--theme-accent); /* Changer au survol */
+            color: var(--gemini-new-chat-text);
+        }
+        .user-profile-actions:hover .user-avatar-container,
+        .user-profile-actions:hover .username-display,
+        .user-profile-actions:hover .google-search-icon {
+            color: var(--gemini-new-chat-text); /* Changer la couleur du texte/icônes au survol */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-grow: 1; /* Permet de prendre l'espace restant */
+        }
+
+        .user-avatar-container {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--theme-accent);
+            color: var(--gemini-new-chat-text);
+            font-weight: 500;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+        .username-display {
+            font-weight: 500;
+            color: var(--theme-text-main);
+            white-space: nowrap; /* Empêche le texte de se casser */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Ajoute des points de suspension si trop long */
+        }
+
+        .user-actions-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .google-search-icon {
+            font-size: 1.4em; /* Taille de l'icône */
+            color: var(--theme-text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: flex; /* Pour centrer l'icône */
+            align-items: center;
+            justify-content: center;
+        }
+        .google-search-icon:hover {
+            color: var(--theme-text-main);
+        }
+
+
+        /* --- PARAMÈTRES ET AIDE (inchangés visuellement, seulement l'accès) --- */
+        .flashes {
+            list-style: none;
+            padding: 10px;
+            margin: 20px auto;
+            border-radius: 8px;
+            font-size: 0.9em;
+            text-align: center;
+            width: 80%;
+            max-width: 900px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        .flashes li {
+            padding: 8px 0;
+            margin-bottom: 5px;
+            background-color: var(--theme-color-secondary);
+            border: 1px solid var(--theme-border);
+            color: var(--theme-text-main);
+        }
+        .flashes .success {
+            border-color: #5cb85c;
+            color: #5cb85c;
+        }
+        .flashes .danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .flashes .info {
+            border-color: #17a2b8;
+            color: #17a2b8;
+        }
+
+        /* Styles pour la barre de défilement (WebKit/Chrome/Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--theme-color-secondary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--theme-text-secondary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--theme-accent-darker);
+        }
+
+        /* --- Panneau de Paramètres (Overlay) --- */
+        .settings-overlay, .help-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+            display: flex;
+            justify-content: flex-end; /* Alignement à droite pour le panneau */
+            align-items: center;
+            z-index: 2000; /* Au-dessus de tout */
+            opacity: 0; /* Caché par défaut */
+            visibility: hidden; /* Caché par défaut */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .settings-overlay.show, .help-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-panel {
+            width: 450px; /* Largeur du panneau de paramètres */
+            height: 100%;
+            background-color: var(--theme-color-main);
+            padding: 30px;
+            box-shadow: -4px 0 15px var(--theme-shadow);
+            transform: translateX(100%); /* Caché à droite */
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .settings-overlay.show .settings-panel {
+            transform: translateX(0); /* Apparaît */
+        }
+
+        .settings-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--theme-border);
+        }
+        .settings-panel-header h3 {
+            margin: 0;
+            font-size: 2em;
+            color: var(--theme-text-main);
+        }
+        .close-settings-button, .close-help-modal-button {
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            color: var(--theme-text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .close-settings-button:hover, .close-help-modal-button:hover {
+            color: var(--theme-accent);
+        }
+
+        .settings-panel-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px; /* Pour le scrollbar */
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--theme-border); /* Ligne de séparation légère */
+        }
+        .settings-section:last-child {
+            border-bottom: none; /* Pas de ligne sur le dernier */
+        }
+
+        .settings-section h4 {
+            font-size: 1.5em;
+            color: var(--theme-accent);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .settings-section p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .settings-section strong {
+            color: var(--theme-text-main);
+        }
+        .manage-account-link {
+            color: var(--theme-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .manage-account-link:hover {
+            color: var(--theme-accent-darker);
+            text-decoration: underline;
+        }
+
+        /* Historique */
+        .history-section {
+            margin-top: 20px;
+            background-color: var(--theme-color-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--theme-border);
+        }
+        .history-section h5 {
+            font-size: 1.1em;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--theme-text-main);
+            font-weight: 500;
+        }
+        .history-section .placeholder-text {
+            font-size: 0.9em;
+            color: var(--theme-text-secondary);
+            font-style: italic;
+        }
+
+        /* Thèmes */
+        .theme-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .theme-button {
+            padding: 10px 20px;
+            border: 1px solid var(--theme-border);
+            border-radius: 20px;
+            background-color: var(--theme-color-secondary);
+            color: var(--theme-text-main);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        }
+        .theme-button:hover {
+            background-color: var(--theme-color-tertiary);
+            transform: translateY(-1px);
+        }
+        .theme-button.active {
+            border-color: var(--theme-accent);
+            background-color: var(--theme-accent);
+            color: var(--gemini-new-chat-text); /* Texte noir sur bouton actif */
+        }
+        /* Couleurs spécifiques pour les boutons de thème */
+        .theme-button[data-theme="dark"] {
+            background-color: #1F1F1F;
+            color: #EAEAEA;
+        }
+        .theme-button[data-theme="green"] {
+            background-color: #2C4745;
+            color: #E0FFFE;
+        }
+        .theme-button[data-theme="white"] {
+            background-color: #F0F0F0;
+            color: #333333;
+        }
+
+        /* Aide (Modal séparé) */
+        .help-modal-overlay {
+            justify-content: center; /* Centre la modal au milieu */
+        }
+        .help-modal-content {
+            background-color: var(--theme-color-secondary);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--theme-shadow);
+            width: 90%;
+            max-width: 600px;
+            transform: translateY(-50px); /* Légèrement décalé vers le haut */
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .help-modal-overlay.show .help-modal-content {
+            transform: translateY(0);
+        }
+        .help-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--theme-border);
+        }
+        .help-modal-header h4 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--theme-text-main);
+        }
+        .help-modal-content textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 1px solid var(--theme-border);
+            border-radius: 8px;
+            background-color: var(--theme-color-tertiary);
+            color: var(--theme-text-main);
+            font-size: 1em;
+            resize: vertical;
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Inclut le padding dans la largeur */
+        }
+        .help-modal-content textarea::placeholder {
+            color: var(--theme-text-secondary);
+        }
+        .submit-problem-button {
+            background-color: var(--theme-accent);
+            color: var(--gemini-new-chat-text);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            align-self: flex-end; /* Aligne le bouton à droite */
+        }
+        .submit-problem-button:hover {
+            background-color: var(--theme-accent-darker);
+            transform: translateY(-1px);
+        }
+
+        /* --- MEDIA QUERIES (Responsive Design) --- */
+        @media (max-width: 768px) {
+            body:not(.sidebar-collapsed) .sidebar {
+                width: 70px; /* Force collapsed on mobile if not already */
+            }
+
+            body.sidebar-collapsed .sidebar {
+                width: 70px; /* Small width */
+                padding: 20px 5px;
+            }
+            
+            .sidebar .new-chat-button span,
+            .sidebar .sidebar-nav li span,
+            .sidebar .username-display,
+            .sidebar .footer-links span,
+            .sidebar h2 {
+                opacity: 0;
+                visibility: hidden;
+                width: 0;
+            }
+
+            .sidebar .new-chat-button {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .sidebar-header {
+                justify-content: center;
+            }
+            .sidebar-header h2,
+            .sidebar-header .new-chat-button {
+                display: none;
+            }
+
+            .sidebar .sidebar-nav a,
+            .sidebar .user-profile-actions,
+            .sidebar .footer-links a {
+                justify-content: center;
+                gap: 0;
+            }
+            .sidebar .user-profile-actions {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 0;
+            }
+            .sidebar .user-info {
+                gap: 0;
+                justify-content: center;
+            }
+            .sidebar .user-info .user-avatar-container {
+                margin-right: 0;
+            }
+            .sidebar .user-actions-icons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .main-content {
+                width: calc(100% - 70px);
+            }
+            .message-area, .input-container {
+                max-width: 95%;
+            }
+            .welcome-message {
+                padding: 0 10px;
+            }
+            .settings-panel {
+                width: 100%;
+                padding: 20px;
+            }
+            .help-modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <button id="toggle-sidebar-button" class="toggle-sidebar-button">☰</button> <h2>Elion</h2>
+            <a href="#" class="new-chat-button">
+                <span class="icon">+</span>
+                <span>Nouveau Chat</span>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#" class="active"><span class="icon">💬</span> <span>Conversation sur Sonic</span></a></li>
+                <li><a href="#"><span class="icon">📈</span> <span>Calcul de Pi</span></a></li>
+                <li><a href="#"><span class="icon">📚</span> <span>Théorie des graphes</span></a></li>
+                <li><a href="#"><span class="icon">🌐</span> <span>Exploration des anneaux</span></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-profile-actions"> <div class="user-info">
+                    <div class="user-avatar-container user-avatar-placeholder">
+                        <span>{{ username[0]|upper }}</span> </div>
+                    <span class="username-display">{{ username }}</span>
+                </div>
+                <div class="user-actions-icons">
+                    <a href="https://www.google.com/search" target="_blank" class="google-search-icon" title="Recherche Google">🔎</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="#" id="open-settings-button"><span class="icon">⚙️</span> <span>Paramètres</span></a>
+                <a href="{{ url_for('logout') }}"><span class="icon">🚪</span> <span>Se déconnecter</span></a>
+                <a href="{{ url_for('home') }}"><span class="icon">🏠</span> <span>Accueil</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="chat-header">
+            <h1>Elion Chat</h1>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+        <div class="message-area">
+            <div class="welcome-message" style="display: block;"> <h2>Cette IA arrive bientôt.</h2>
+                <p>Elion est en cours de développement pour vous offrir une expérience riche et interactive. Revenez bientôt pour découvrir toutes ses capacités !</p>
+            </div>
+            </div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <textarea id="chat-input" placeholder="Message Elion..." rows="1"></textarea>
+                <button id="send-button" class="send-button">➤</button> </div>
+        </div>
+    </div>
+
+    <div id="settings-overlay" class="settings-overlay">
+        <div class="settings-panel">
+            <div class="settings-panel-header">
+                <h3>Paramètres</h3>
+                <button class="close-settings-button">X</button>
+            </div>
+            <div class="settings-panel-content">
+                <div class="settings-section">
+                    <h4>Comptes</h4>
+                    <p>Email: <strong>{{ username }}@elion.com</strong></p>
+                    <p>Mot de passe: **********</p>
+                    <a href="#" class="manage-account-link">Gérer le compte</a>
+                    <div class="history-section">
+                        <h5>Historique question/réponse</h5>
+                        <p class="placeholder-text">L'historique détaillé de vos conversations serait affiché ici (ex: "Vous: Quelle est la vitesse de Sonic ? - Elion: Plus de 1200 km/h !"). Cette fonctionnalité nécessite un stockage en base de données et une logique backend pour être pleinement fonctionnelle.</p>
+                        </div>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Thèmes</h4>
+                    <div class="theme-options">
+                        <button class="theme-button" data-theme="dark">Noir</button>
+                        <button class="theme-button" data-theme="green">Vert foncé</button>
+                        <button class="theme-button" data-theme="white">Blanc</button>
+                    </div>
+                    <p style="font-size: 0.85em; color: var(--theme-text-secondary); margin-top: 15px;">Note: Le changement de thème est visuel pour le moment. Une sauvegarde permanente nécessiterait une base de données.</p>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Version de l'App</h4>
+                    <p>Elion standard 1.0.12</p>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Aide</h4>
+                    <button class="open-help-modal-button">Envoyer nous votre problème</button>
+                    <p style="font-size: 0.85em; color: var(--theme-text-secondary); margin-top: 15px;">Cliquez sur le bouton ci-dessus pour signaler un souci ou poser une question à notre support.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="help-modal" class="help-modal-overlay">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h4>Envoyer nous votre problème</h4>
+                <button class="close-help-modal-button">X</button>
+            </div>
+            <textarea placeholder="Décrivez votre problème ici en détail..."></textarea>
+            <button class="submit-problem-button">Envoyer</button>
+            <p style="font-size: 0.85em; color: var(--theme-text-secondary); margin-top: 15px; text-align: center;">Cette fonction d'envoi nécessiterait une logique côté serveur pour recevoir et traiter le message.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+
+            // --- Chat Functionality ---
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            const messageArea = document.querySelector('.message-area');
+            const welcomeMessage = document.querySelector('.welcome-message'); // Sélectionnez le message de bienvenue
+
+            // Fonction pour ajouter un message à la zone de chat
+            function addMessage(sender, text) {
+                // Cache le message de bienvenue uniquement s'il est visible et qu'il y a un nouveau message
+                if (welcomeMessage && welcomeMessage.style.display !== 'none') {
+                    welcomeMessage.style.display = 'none';
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', sender); // 'user' ou 'elion'
+
+                const avatarContainer = document.createElement('div');
+                avatarContainer.classList.add('message-avatar-container');
+                if (sender === 'user') {
+                    avatarContainer.classList.add('user-avatar-placeholder');
+                    const firstLetter = '{{ username[0]|upper }}'; // Récupérer la première lettre de l'utilisateur
+                    avatarContainer.textContent = firstLetter;
+                } else {
+                    avatarContainer.classList.add('elion-avatar-placeholder');
+                    avatarContainer.textContent = 'E'; // 'E' pour Elion
+                }
+
+                const messageContent = document.createElement('div');
+                messageContent.classList.add('message-content');
+                messageContent.textContent = text;
+
+                messageDiv.appendChild(avatarContainer);
+                messageDiv.appendChild(messageContent);
+                messageArea.appendChild(messageDiv);
+
+                // Auto-scroll vers le bas
+                messageArea.scrollTop = messageArea.scrollHeight;
+            }
+
+            // Fonction pour envoyer un message
+            async function sendMessage() {
+                const messageText = chatInput.value.trim();
+                if (messageText === "") return;
+
+                // Ajoutez le message de l'utilisateur au chat
+                addMessage('user', messageText);
+                chatInput.value = ''; // Efface l'entrée
+
+                try {
+                    const response = await fetch('/send_message', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: messageText })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        addMessage('elion', data.response); // Ajoutez la réponse d'Elion
+                    } else {
+                        console.error('Erreur lors de l\'envoi du message:', response.statusText);
+                        addMessage('elion', 'Désolé, une erreur est survenue lors du traitement de votre demande.');
+                    }
+                } catch (error) {
+                    console.error('Erreur réseau:', error);
+                    addMessage('elion', 'Désolé, je n\'ai pas pu me connecter. Veuillez vérifier votre connexion.');
+                }
+            }
+
+            // Écouteurs d'événements pour l'entrée du chat et le bouton d'envoi
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) { // Envoyer sur Entrée, nouvelle ligne sur Shift+Entrée
+                    event.preventDefault(); // Empêche une nouvelle ligne
+                    sendMessage();
+                }
+            });
+
+            // Redimensionnement automatique de la zone de texte
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
+            // --- Gestion du panneau de paramètres ---
+            const openSettingsBtn = document.getElementById('open-settings-button');
+            const settingsOverlay = document.getElementById('settings-overlay');
+            const closeSettingsBtn = document.querySelector('.close-settings-button');
+
+            openSettingsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                settingsOverlay.classList.add('show');
+            });
+
+            closeSettingsBtn.addEventListener('click', function() {
+                settingsOverlay.classList.remove('show');
+            });
+
+            settingsOverlay.addEventListener('click', function(e) {
+                if (e.target === settingsOverlay) {
+                    settingsOverlay.classList.remove('show');
+                }
+            });
+
+            // --- Gestion de la modale d'aide ---
+            const openHelpModalBtn = document.querySelector('.open-help-modal-button');
+            const helpModalOverlay = document.getElementById('help-modal');
+            const closeHelpModalBtn = document.querySelector('.close-help-modal-button');
+
+            openHelpModalBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                helpModalOverlay.classList.add('show');
+            });
+
+            closeHelpModalBtn.addEventListener('click', function() {
+                helpModalOverlay.classList.remove('show');
+            });
+
+            helpModalOverlay.addEventListener('click', function(e) {
+                if (e.target === helpModalOverlay) {
+                    helpModalOverlay.classList.remove('show');
+                }
+            });
+
+            // --- Gestion du changement de thème ---
+            const themeButtons = document.querySelectorAll('.theme-button');
+
+            function applyTheme(themeName) {
+                body.classList.remove('theme-dark', 'theme-green', 'theme-white');
+                if (themeName !== 'dark') {
+                    body.classList.add('theme-' + themeName);
+                }
+                themeButtons.forEach(button => {
+                    if (button.dataset.theme === themeName) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+                localStorage.setItem('elionTheme', themeName);
+            }
+
+            const savedTheme = localStorage.getItem('elionTheme') || 'dark';
+            applyTheme(savedTheme);
+
+            themeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    applyTheme(this.dataset.theme);
+                });
+            });
+
+            // --- Gestion de la barre latérale ---
+            const toggleSidebarButton = document.getElementById('toggle-sidebar-button');
+
+            function toggleSidebar() {
+                body.classList.toggle('sidebar-collapsed');
+            }
+
+            toggleSidebarButton.addEventListener('click', toggleSidebar);
+
+            // Définir l'état initial de la barre latérale en fonction de la largeur de l'écran
+            function setInitialSidebarState() {
+                if (window.innerWidth <= 768) {
+                    body.classList.add('sidebar-collapsed');
+                } else {
+                    body.classList.remove('sidebar-collapsed');
+                }
+            }
+
+            setInitialSidebarState();
+            window.addEventListener('resize', setInitialSidebarState);
+        });
+    </script>
+</body>
+</html>

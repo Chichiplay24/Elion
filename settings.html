@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres Elion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #343541; /* Arrière-plan principal de ChatGPT */
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Utiliser min-height pour permettre le défilement si contenu long */
+            margin: 0;
+            padding: 20px; /* Ajouter un peu de padding pour les petits écrans */
+            box-sizing: border-box;
+        }
+
+        .settings-container {
+            background-color: #202123; /* Couleur de fond du conteneur des paramètres */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 800px; /* Largeur maximale pour les paramètres */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #FFFFFF;
+            font-size: 2em;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Séparateur léger */
+        }
+
+        .settings-section:last-child {
+            border-bottom: none; /* Pas de bordure pour la dernière section */
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            color: #B0B0B0; /* Couleur des titres de section */
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border-left: 4px solid #19C37D; /* Petite barre de couleur à gauche */
+            padding-left: 10px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Ligne fine entre les items */
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-item label {
+            flex-grow: 1;
+            font-size: 1.1em;
+            color: #E0E0E0;
+        }
+
+        .setting-item select,
+        .setting-item button {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #444654; /* Bordure discrète */
+            background-color: #444654; /* Fond des contrôles */
+            color: #FFFFFF;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .setting-item select:focus,
+        .setting-item button:focus {
+            outline: none;
+            border-color: #19C37D; /* Bordure verte au focus */
+        }
+
+        .setting-item button {
+            background-color: #19C37D; /* Vert pour les boutons d'action */
+            border-color: #19C37D;
+        }
+
+        .setting-item button:hover {
+            background-color: #10A37F;
+            border-color: #10A37F;
+        }
+
+        /* Styles spécifiques pour le sélecteur de thème */
+        .theme-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .theme-radio {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #8E8E8E;
+            background-color: #444654;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .theme-radio:checked {
+            border-color: #19C37D;
+            background-color: #19C37D;
+        }
+
+        .theme-radio:checked::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Bouton de retour */
+        .back-button {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0 auto;
+            padding: 10px 20px;
+            background-color: #444654;
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-button:hover {
+            background-color: #55576A;
+        }
+
+        /* Médias Queries */
+        @media (max-width: 600px) {
+            .settings-container {
+                padding: 20px;
+                margin: 0 10px;
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .setting-item select,
+            .setting-item button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .theme-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h1>Paramètres</h1>
+
+        <div class="settings-section">
+            <h2>Général</h2>
+            <div class="setting-item">
+                <label for="language">Langue</label>
+                <select id="language">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label>Thème</label>
+                <div class="theme-options">
+                    <label class="theme-option">
+                        <input type="radio" name="theme" value="dark" class="theme-radio" checked> Sombre
+                    </label>
+                    <label class="theme-option">
+                        <input type="radio" name="theme" value="light" class="theme-radio" disabled> Clair (Bientôt)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Compte</h2>
+            <div class="setting-item">
+                <label>Gérer votre compte Elion</label>
+                <button onclick="alert('Fonctionnalité de gestion de compte à implémenter.')">Gérer</button>
+            </div>
+            <div class="setting-item">
+                <label>Supprimer toutes les discussions</label>
+                <button onclick="confirm('Êtes-vous sûr de vouloir supprimer toutes les discussions ?')">Supprimer tout</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Confidentialité et Sécurité</h2>
+            <div class="setting-item">
+                <label>Politique de confidentialité</label>
+                <button onclick="alert('Redirection vers la politique de confidentialité.')">Voir</button>
+            </div>
+            <div class="setting-item">
+                <label>Conditions d'utilisation</label>
+                <button onclick="alert('Redirection vers les conditions d\'utilisation.')">Voir</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Abonnement</h2>
+            <div class="setting-item">
+                <label>Statut de l'abonnement</label>
+                <span>Gratuit</span>
+            </div>
+            <div class="setting-item">
+                <label>Mettre à niveau vers Elion Plus</label>
+                <button onclick="alert('Fonctionnalité d\'abonnement à implémenter.')">Mettre à niveau</button>
+            </div>
+        </div>
+
+        <a href="{{ url_for('index') }}" class="back-button">Retour au chat</a>
+    </div>
+</body>
+</html>

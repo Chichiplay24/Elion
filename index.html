@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur Elion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS pour un thème Samsung-like */
+        :root {
+            --samsung-bg-dark: #121212; /* Fond très sombre */
+            --samsung-card-bg: #1F1F1F; /* Fond des éléments comme header, footer, cartes */
+            --samsung-accent-blue: #007BFF; /* Bleu vif pour les accents et boutons */
+            --samsung-accent-blue-dark: #0056b3; /* Bleu plus foncé au survol */
+            --samsung-text-light: #E0E0E0; /* Texte clair principal */
+            --samsung-text-muted: #A0A0A0; /* Texte secondaire, icônes */
+            --samsung-border-color: rgba(255, 255, 255, 0.1); /* Bordures subtiles */
+            --samsung-shadow: rgba(0, 0, 0, 0.6); /* Ombre des éléments */
+            --samsung-button-text: white;
+            --samsung-info-bg: #2C2C2E; /* Fond pour les blocs d'information */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--samsung-bg-dark);
+            color: var(--samsung-text-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Empêche le débordement horizontal */
+        }
+
+        .header {
+            background-color: var(--samsung-card-bg);
+            color: var(--samsung-text-light);
+            padding: 15px 30px; /* Plus de padding pour un look plus aéré */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px var(--samsung-shadow); /* Ombre plus douce */
+            position: sticky;
+            top: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 45px; /* Taille légèrement ajustée */
+            width: auto;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.6em;
+            letter-spacing: 0.5px;
+            color: var(--samsung-accent-blue);
+            font-weight: 500;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px; /* Espace entre les éléments */
+            align-items: center; /* Pour aligner les boutons avec les liens */
+        }
+
+        .nav-links a {
+            color: var(--samsung-text-light);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--samsung-accent-blue);
+        }
+
+        /* Styles pour les boutons "Se connecter" et "Obtenir l'app" */
+        .nav-button {
+            background-color: var(--samsung-accent-blue);
+            color: var(--samsung-button-text);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px; /* Très arrondis */
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-button:hover {
+            background-color: var(--samsung-accent-blue-dark);
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px; /* Plus de padding vertical */
+            text-align: center;
+            color: var(--samsung-text-light);
+            background-color: var(--samsung-bg-dark); /* S'assurer du fond sombre */
+        }
+
+        .main-content h2 {
+            font-size: 3.5em; /* Taille plus grande */
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--samsung-accent-blue);
+            font-weight: 700;
+        }
+
+        .main-content p.tagline {
+            font-size: 1.4em;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-bottom: 40px;
+            color: var(--samsung-text-muted); /* Texte un peu plus discret */
+        }
+
+        /* Bouton "Commencer" */
+        .start-button {
+            background-color: var(--samsung-accent-blue);
+            color: var(--samsung-button-text);
+            padding: 15px 40px; /* Bouton plus grand */
+            border: none;
+            border-radius: 30px; /* Très arrondi */
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 50px; /* Espace après le bouton */
+        }
+
+        .start-button:hover {
+            background-color: var(--samsung-accent-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Section d'information */
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 50px; /* Espace au-dessus de la section info */
+        }
+
+        .info-block {
+            background-color: var(--samsung-info-bg);
+            padding: 30px;
+            border-radius: 15px; /* Arrondis doux */
+            box-shadow: 0 4px 15px var(--samsung-shadow);
+            text-align: left;
+            border: 1px solid var(--samsung-border-color);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .info-block:hover {
+            transform: translateY(-5px);
+            background-color: #38383a; /* Légèrement plus clair au survol */
+        }
+
+        .info-block h3 {
+            font-size: 1.8em;
+            color: var(--samsung-accent-blue);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .info-block p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: var(--samsung-text-light);
+            margin-bottom: 0;
+        }
+
+        .footer {
+            background-color: var(--samsung-card-bg);
+            color: var(--samsung-text-muted);
+            text-align: center;
+            padding: 25px;
+            margin-top: auto;
+            box-shadow: 0 -4px 10px var(--samsung-shadow);
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Espace entre copyright et icônes */
+        }
+
+        .footer-social-icons {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .footer-social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .footer-social-icons a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-social-icons img {
+            width: 35px; /* Taille des icônes de pied de page */
+            height: 35px;
+            filter: grayscale(100%) brightness(150%); /* Rendu gris */
+            transition: filter 0.2s ease;
+        }
+
+        .footer-social-icons a:hover img {
+            filter: grayscale(0%) brightness(100%); /* Couleurs au survol */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+            .nav-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-top: 15px;
+            }
+            .main-content h2 {
+                font-size: 2.5em;
+            }
+            .main-content p.tagline {
+                font-size: 1.1em;
+            }
+            .start-button {
+                padding: 12px 30px;
+                font-size: 1.1em;
+            }
+            .info-section {
+                padding: 0 15px;
+            }
+            .info-block {
+                padding: 20px;
+            }
+            .info-block h3 {
+                font-size: 1.5em;
+            }
+            .info-block p {
+                font-size: 1em;
+            }
+            .footer-social-icons {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='elion_logo_black_bg.png') }}" alt="Elion Logo" class="logo">
+            <h1>Elion</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Accueil</a></li>
+            {% if session.get('user_id') %}
+                <li><a href="{{ url_for('chat_page') }}">Elion Chat</a></li>
+                <li><a href="{{ url_for('logout') }}" class="nav-button">Déconnexion</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}" class="nav-button">Se connecter</a></li>
+                <li><a href="#" class="nav-button">Obtenir l'App</a></li> {% endif %}
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h2>Bienvenue sur Elion</h2>
+        <p class="tagline">Votre plateforme intelligente dédiée à l'univers vibrant de Sonic et aux principes fascinants des mathématiques. Découvrez une nouvelle dimension de l'apprentissage et du divertissement.</p>
+
+        <a href="{{ url_for('chat_page') }}" class="start-button">Commencer</a>
+
+        <div class="info-section">
+            <div class="info-block">
+                <h3>À Propos d'Elion</h3>
+                <p>Elion est une intelligence artificielle avancée, conçue pour être votre compagnon dans l'exploration de deux mondes passionnants : l'univers trépidant de Sonic le Hérisson et le domaine structuré des mathématiques. Préparez-vous à des réponses précises et engageantes.</p>
+            </div>
+            <div class="info-block">
+                <h3>L'Univers de Sonic : Vitesse et Aventures</h3>
+                <p>Plongez dans les dernières actualités des jeux, des films et des bandes dessinées de Sonic. De ses origines emblématiques à ses aventures modernes en 3D, Elion vous tiendra informé des secrets, des personnages et des théories qui rendent cet univers si captivant.</p>
+            </div>
+            <div class="info-block">
+                <h3>Les Mathématiques avec Sonic : Apprendre en Jouant</h3>
+                <p>Découvrez comment les mathématiques se cachent derrière la vitesse, les boucles et les énigmes de Sonic. Que ce soit pour comprendre les trajectoires, optimiser les parcours ou déchiffrer des codes, Elion rendra les concepts mathématiques plus accessibles et amusants.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Propriètè appartenant à @Chichiplay24. Tous droits réservés.</p>
+        <div class="footer-social-icons">
+            <a href="https://anime.kenmaz.net/account/543337" target="_blank" title="Anime Maker Kenmaz">
+                <img src="{{ url_for('static', filename='pencil_icon_grey.png') }}" alt="Anime Maker">
+            </a>
+            <a href="https://www.youtube.com/@Chichiplay24" target="_blank" title="Chaîne YouTube Elion">
+                <img src="{{ url_for('static', filename='youtube_icon_grey.png') }}" alt="YouTube">
+            </a>
+        </div>
+    </div>
+</body>
+</html>
