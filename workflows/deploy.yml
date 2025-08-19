@@ -1,0 +1,40 @@
+# Nom du workflow
+name: Deploy static site to Pages
+
+# Quand le workflow doit s'exécuter
+on:
+  push:
+    branches: ["main"]
+
+# Définition des autorisations requises
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Définition des jobs (tâches)
+jobs:
+  # Le job pour le déploiement
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Étape pour uploader les fichiers de votre site
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Le dossier qui contient votre site
+          path: './'
+
+      # Déploiement du site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
